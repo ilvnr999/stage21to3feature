@@ -67,49 +67,50 @@ class RBFNN:
 
 # 使用範例
 if __name__ == "__main__":
-    target = 'SP'
-    best_R2 = [[],[]]
-    save_R2 = [[],[]]
-    data = pd.read_excel(f'stage2_excels/{target}/{target}_merge_data.xlsx')
-    nor = data.loc[:,'nor'].values
-    all_tags = data.columns
-    num_tags = len(all_tags)
-    for i in range(4, num_tags):
-        feature = data.iloc[:, i].values
-        sort = np.argsort(feature)
-        X = feature[sort].reshape(-1,1)
-        x1 = tuple(feature)
-        x2 = set(x1) 
-        #print(x2)
-        if len(x2)<=2:
-            continue
-        y = nor[sort]
-        tag = all_tags[i]
-        R2 = []
-        #print(X)
-        #print(y)
-        rbf = RBFNN(input_dim=1, num_centers=2, output_dim=1)
-        kfold = KFold(n_splits=5, shuffle=True, random_state=4)
-        for train_index, test_index in kfold.split(X):
-            X_train, X_test = X[train_index], X[test_index]
-            y_train, y_test = y[train_index], y[test_index]
-            rbf.fit(X_train,y_train)
-            R2.append((rbf.score(X_test, y_test)))
-            #print(rbf.score(X_test, y_test))
-        best_R2[0].append(tag)
-        best_R2[1].append(np.mean(R2))    
-    print(target)
-    best3 = np.array(best_R2[1])
-    b = best3.argsort()
-    length = len(b)
-    for i in range(length-1,0,-1):
-        print("%-20s %10.3f"%(best_R2[0][b[i]],best_R2[1][b[i]]))
-        save_R2[0].append(best_R2[0][b[i]])
-        save_R2[1].append(best_R2[1][b[i]])
+    target_list = ['PD','SP','GA']
+    for target in target_list:
+        best_R2 = [[],[]]
+        save_R2 = [[],[]]
+        data = pd.read_excel(f'stage2_excels/{target}/{target}_merge_data.xlsx')
+        nor = data.loc[:,'nor'].values
+        all_tags = data.columns
+        num_tags = len(all_tags)
+        for i in range(4, num_tags):
+            feature = data.iloc[:, i].values
+            sort = np.argsort(feature)
+            X = feature[sort].reshape(-1,1)
+            x1 = tuple(feature)
+            x2 = set(x1) 
+            #print(x2)
+            if len(x2)<=2:
+                continue
+            y = nor[sort]
+            tag = all_tags[i]
+            R2 = []
+            #print(X)
+            #print(y)
+            rbf = RBFNN(input_dim=1, num_centers=2, output_dim=1)
+            kfold = KFold(n_splits=5, shuffle=True, random_state=4)
+            for train_index, test_index in kfold.split(X):
+                X_train, X_test = X[train_index], X[test_index]
+                y_train, y_test = y[train_index], y[test_index]
+                rbf.fit(X_train,y_train)
+                R2.append((rbf.score(X_test, y_test)))
+                #print(rbf.score(X_test, y_test))
+            best_R2[0].append(tag)
+            best_R2[1].append(np.mean(R2))    
+        print(target)
+        best3 = np.array(best_R2[1])
+        b = best3.argsort()
+        length = len(b)
+        for i in range(length-1,0,-1):
+            print("%-20s %10.3f"%(best_R2[0][b[i]],best_R2[1][b[i]]))
+            save_R2[0].append(best_R2[0][b[i]])
+            save_R2[1].append(best_R2[1][b[i]])
 
-    df = pd.DataFrame({"tag":save_R2[0], "R2":save_R2[1]})
-    file_path = f'stage2_excels/{target}/{target}_kfold_RBFNN.xlsx'     # 輸出excel檔案名稱
-    with pd.ExcelWriter(file_path, engine = 'openpyxl', mode = 'w') as writer:
-        df.to_excel(writer, sheet_name=target, index = False)
-        print(f'{target} kflod saved.')
+        df = pd.DataFrame({"tag":save_R2[0], "R2":save_R2[1]})
+        file_path = f'stage2_excels/{target}/{target}_kfold_RBFNN.xlsx'     # 輸出excel檔案名稱
+        with pd.ExcelWriter(file_path, engine = 'openpyxl', mode = 'w') as writer:
+            df.to_excel(writer, sheet_name=target, index = False)
+            print(f'{target} kflod saved.')
 
