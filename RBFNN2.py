@@ -107,7 +107,7 @@ if __name__ == "__main__":
         save_R2[1].append(best_R2[1][b[i]])
 
     df = pd.DataFrame({"tag":save_R2[0], "R2":save_R2[1]})
-    file_path = f'stage2_excels/{target}/{target}_kfold_rgb.xlsx'     # 輸出excel檔案名稱
+    file_path = f'stage2_excels/{target}/{target}_kfold_RBFNN.xlsx'     # 輸出excel檔案名稱
     with pd.ExcelWriter(file_path, engine = 'openpyxl', mode = 'w') as writer:
         df.to_excel(writer, sheet_name=target, index = False)
         print(f'{target} kflod saved.')
