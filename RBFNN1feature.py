@@ -67,13 +67,14 @@ class RBFNN:
 
 # 使用範例
 if __name__ == "__main__":
-    target = 'GA'
+    target = 'SP'
     best_R2 = [[],[]]
     save_R2 = [[],[]]
     data = pd.read_excel(f'stage2_excels/{target}/{target}_merge_data.xlsx')
     nor = data.loc[:,'nor'].values
     all_tags = data.columns
-    for i in range(4, 93):
+    num_tags = len(all_tags)
+    for i in range(4, num_tags):
         feature = data.iloc[:, i].values
         sort = np.argsort(feature)
         X = feature[sort].reshape(-1,1)
