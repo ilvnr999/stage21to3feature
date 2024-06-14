@@ -40,9 +40,9 @@ def main(target_list):
                                             "hsv_h_mean","hsv_h_median","hsv_h_variance","hsv_h_std_dev","hsv_h_25","hsv_h_75",
                                             "hsv_s_mean","hsv_s_median","hsv_s_variance","hsv_s_std_dev","hsv_s_25","hsv_s_75",
                                             "hsv_v_mean","hsv_v_median","hsv_v_variance","hsv_v_std_dev","hsv_v_25","hsv_v_75",
-                                            "lab_l_mean","lab_l_median","lab_l_variance","lab_l_std_dev","lab_l_25","lab_l_75",
-                                            "lab_a_mean","lab_a_median","lab_a_variance","lab_a_std_dev","lab_a_25","lab_a_75",
-                                            "lab_b_mean","lab_b_median","lab_b_variance","lab_b_std_dev","lab_b_25","lab_b_75",
+                                            "yuv_y_mean","yuv_y_median","yuv_y_variance","yuv_y_std_dev","yuv_y_25","yuv_y_75",
+                                            "yuv_u_mean","yuv_u_median","yuv_u_variance","yuv_u_std_dev","yuv_u_25","yuv_u_75",
+                                            "yuv_v_mean","yuv_v_median","yuv_v_variance","yuv_v_std_dev","yuv_v_25","yuv_v_75",
                                             "xyz_x_mean","xyz_x_median","xyz_x_variance","xyz_x_std_dev","xyz_x_25","xyz_x_75",
                                             "xyz_y_mean","xyz_y_median","xyz_y_variance","xyz_y_std_dev","xyz_y_25","xyz_y_75",
                                             "xyz_z_mean","xyz_z_median","xyz_z_variance","xyz_z_std_dev","xyz_z_25","xyz_z_75"])      # 設定資料為dataframe column名稱設定

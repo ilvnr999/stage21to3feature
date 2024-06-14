@@ -62,7 +62,7 @@ def main(target_list):
         if i != 0:
             result = cv2.cvtColor(result, cv2.COLOR_HSV2BGR)        # 轉回BGR
         if i == 1:
-            result = cv2.cvtColor(result, cv2.COLOR_BGR2LAB)        # 轉為其他顏色空間！！！！！
+            result = cv2.cvtColor(result, cv2.COLOR_BGR2YUV)        # 轉為其他顏色空間！！！！！
         if i == 2:
             result = cv2.cvtColor(result, cv2.COLOR_BGR2XYZ)        # 轉為其他顏色空間！！！！！
         # 讀取個通道值
@@ -79,13 +79,14 @@ def main(target_list):
             hsv_s.append(Statistical2)        # 第二個通道平均值加入lsit
             hsv_v.append(Statistical3)        # 第三個通道平均值加入lsit
         if i == 1:
-            lab_l.append(Statistical1)        # 第一個通道平均值加入lsit
-            lab_a.append(Statistical2)        # 第二個通道平均值加入lsit
-            lab_b.append(Statistical3)        # 第三個通道平均值加入lsit
+            yuv_y.append(Statistical1)        # 第一個通道平均值加入lsit
+            yuv_u.append(Statistical2)        # 第二個通道平均值加入lsit
+            yuv_v.append(Statistical3)        # 第三個通道平均值加入lsit
         if i == 2:
             xyz_x.append(Statistical1)        # 第一個通道平均值加入lsit
             xyz_y.append(Statistical2)        # 第二個通道平均值加入lsit
             xyz_z.append(Statistical3)        # 第三個通道平均值加入lsit
+
 
     def excel_data(picture, picture_area):      # 照片名稱、面積 加入list 輸入圖片名稱 原始圖片面積
         picture_name = os.path.splitext(picture)      # 取出照片名稱（不含位址）
@@ -93,39 +94,40 @@ def main(target_list):
         area.append(picture_area)       # 將面積加入 area list
 
     def save_excel_data(name,area,
-                        hsv_h,hsv_s,hsv_v,lab_l,lab_a,lab_b,xyz_x,xyz_y,xyz_z):       
+                        hsv_h,hsv_s,hsv_v,yuv_y,yuv_u,yuv_v,xyz_x,xyz_y,xyz_z):       
         # 儲存所有值到excel檔案當中的個別種類工作表中
         # excel column 名稱
         hsv_h = np.array(hsv_h)       # mean,median,variance,std_dev,percentile_25,percentile_75      # mean,median,variance,std_dev,percentile_25,percentile_75
         hsv_s = np.array(hsv_s) 
         hsv_v = np.array(hsv_v) 
-        lab_l = np.array(lab_l) 
-        lab_a = np.array(lab_a) 
-        lab_b = np.array(lab_b)  
+        yuv_y = np.array(yuv_y) 
+        yuv_u = np.array(yuv_u) 
+        yuv_v = np.array(yuv_v)  
         xyz_x = np.array(xyz_x) 
         xyz_y = np.array(xyz_y) 
         xyz_z = np.array(xyz_z) 
+         
         file_path = f"stage2_excels/{target}/{target}_color_space.xlsx"        # excel 儲存位址
         column = ["name","area",
                 "hsv_h_mean","hsv_h_median","hsv_h_variance","hsv_h_std_dev","hsv_h_25","hsv_h_75",
                 "hsv_s_mean","hsv_s_median","hsv_s_variance","hsv_s_std_dev","hsv_s_25","hsv_s_75",
                 "hsv_v_mean","hsv_v_median","hsv_v_variance","hsv_v_std_dev","hsv_v_25","hsv_v_75",
-                "lab_l_mean","lab_l_median","lab_l_variance","lab_l_std_dev","lab_l_25","lab_l_75",
-                "lab_a_mean","lab_a_median","lab_a_variance","lab_a_std_dev","lab_a_25","lab_a_75",
-                "lab_b_mean","lab_b_median","lab_b_variance","lab_b_std_dev","lab_b_25","lab_b_75",
+                "yuv_y_mean","yuv_y_median","yuv_y_variance","yuv_y_std_dev","yuv_y_25","yuv_y_75",
+                "yuv_u_mean","yuv_u_median","yuv_u_variance","yuv_u_std_dev","yuv_u_25","yuv_u_75",
+                "yuv_v_mean","yuv_v_median","yuv_v_variance","yuv_v_std_dev","yuv_v_25","yuv_v_75",
                 "xyz_x_mean","xyz_x_median","xyz_x_variance","xyz_x_std_dev","xyz_x_25","xyz_x_75",
                 "xyz_y_mean","xyz_y_median","xyz_y_variance","xyz_y_std_dev","xyz_y_25","xyz_y_75",
-                "xyz_z_mean","xyz_z_median","xyz_z_variance","xyz_z_std_dev","xyz_z_25","xyz_z_75"]
+                "xyz_z_mean","xyz_z_median","xyz_z_variance","xyz_z_std_dev","xyz_z_25","xyz_z_75",]
         data_value = np.column_stack((name, area,
                     hsv_h[:,0], hsv_h[:,1], hsv_h[:,2], hsv_h[:,3], hsv_h[:,4], hsv_h[:,5],
                     hsv_s[:,0], hsv_s[:,1], hsv_s[:,2], hsv_s[:,3], hsv_s[:,4], hsv_s[:,5],
                     hsv_v[:,0], hsv_v[:,1], hsv_v[:,2], hsv_v[:,3], hsv_v[:,4], hsv_v[:,5],
-                    lab_l[:,0], lab_l[:,1], lab_l[:,2], lab_l[:,3], lab_l[:,4], lab_l[:,5],
-                    lab_a[:,0], lab_a[:,1], lab_a[:,2], lab_a[:,3], lab_a[:,4], lab_a[:,5],
-                    lab_b[:,0], lab_b[:,1], lab_b[:,2], lab_b[:,3], lab_b[:,4], lab_b[:,5],
+                    yuv_y[:,0], yuv_y[:,1], yuv_y[:,2], yuv_y[:,3], yuv_y[:,4], yuv_y[:,5],
+                    yuv_u[:,0], yuv_u[:,1], yuv_u[:,2], yuv_u[:,3], yuv_u[:,4], yuv_u[:,5],
+                    yuv_v[:,0], yuv_v[:,1], yuv_v[:,2], yuv_v[:,3], yuv_v[:,4], yuv_v[:,5],
                     xyz_x[:,0], xyz_x[:,1], xyz_x[:,2], xyz_x[:,3], xyz_x[:,4], xyz_x[:,5],
                     xyz_y[:,0], xyz_y[:,1], xyz_y[:,2], xyz_y[:,3], xyz_y[:,4], xyz_y[:,5],
-                    xyz_z[:,0], xyz_z[:,1], xyz_z[:,2], xyz_z[:,3], xyz_z[:,4], xyz_z[:,5]))
+                    xyz_z[:,0], xyz_z[:,1], xyz_z[:,2], xyz_z[:,3], xyz_z[:,4], xyz_z[:,5],))
         data = pd.DataFrame(data_value ,columns=column)       # 所有資料變成dataframe
         with pd.ExcelWriter(file_path, engine='openpyxl', mode='w') as writer:     # 設定？
             data.to_excel(writer, sheet_name=target, index=False)       # 將資料寫入excel
@@ -140,12 +142,13 @@ def main(target_list):
         hsv_h = []      # mean,median,variance,std_dev,percentile_25,percentile_75
         hsv_s = []
         hsv_v = []
-        lab_l = []
-        lab_a = []
-        lab_b = []
+        yuv_y = []
+        yuv_u = []
+        yuv_v = []
         xyz_x = []
         xyz_y = []
         xyz_z = []
+
         count = 0     # 計數幾張照片
         # 讀取資料夾內的照片
         source_path1 = f'stage2_data/{target}'       # 讀取資料源第一個資料夾
@@ -168,5 +171,5 @@ def main(target_list):
         time.sleep(0.1)  # 模拟操作耗时
         # 儲存所有值到excel檔案當中的個別種類工作表中
         save_excel_data(name,area,
-                        hsv_h,hsv_s,hsv_v,lab_l,lab_a,lab_b,xyz_x,xyz_y,xyz_z)         
+                        hsv_h,hsv_s,hsv_v,yuv_y,yuv_u,yuv_v,xyz_x,xyz_y,xyz_z)         
         print(count)    #   图片個数

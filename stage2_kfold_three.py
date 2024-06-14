@@ -41,13 +41,7 @@ def main(target_list):
         best3 = np.array(best_R2[4])
         b = best3.argsort()
         length = len(b)
-        if length >= 5:
-            start = length -1
-            stop = length -6
-        else :
-            start = length - 1
-            stop = -1
-        for i in range(start,stop,-1):
+        for i in range(length-1,-1,-1):
             print("%-20s %-20s %-20s %d %10.6f"%(best_R2[0][b[i]],best_R2[1][b[i]],best_R2[2][b[i]],best_R2[3][b[i]],best_R2[4][b[i]]))
             save_R2[0].append(best_R2[0][b[i]])
             save_R2[1].append(best_R2[1][b[i]])
