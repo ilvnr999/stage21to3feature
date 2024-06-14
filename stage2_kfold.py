@@ -16,7 +16,7 @@ def main(target_list):
         all_tags = data.columns
         #feature = data.iloc[:, 1:19]
         #print(nor)
-        for i in range(4, len(all_tags)):
+        for i in range(22, len(all_tags)):
             feature = data.iloc[:, i].values
             sort = np.argsort(feature)
             X = feature[sort].reshape(-1,1)

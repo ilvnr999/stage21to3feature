@@ -11,6 +11,7 @@ def main(target_list):
     for target in target_list:
         best_R2 = [[],[],[],[]]
         save_R2 = [[],[],[],[]]
+        save_r2 = [[],[]]
         data = pd.read_excel(f'stage2_excels/{target}/{target}_merge_data.xlsx')
         y = data['nor']
         all_tags = data.columns
@@ -20,6 +21,7 @@ def main(target_list):
             for j in range(len(all_tags)-i):
                 tag1 = all_tags[i]
                 tag2 = all_tags[i+j]
+                
                 X = np.column_stack((data[tag1],data[tag2]))
                 degree = [1, 2, 3]
                 for index, num in enumerate(degree):
@@ -32,10 +34,14 @@ def main(target_list):
                         regressor.fit(X_train,y_train)
                         R2.append((regressor.score(X_test, y_test)))
                     if np.mean(R2) > 0:
+                        tag_merge = tag1 + tag2 + str(num)
                         best_R2[0].append(tag1)
                         best_R2[1].append(tag2)
                         best_R2[2].append(num)
                         best_R2[3].append(np.mean(R2))
+                        save_r2[0].append(tag_merge)
+                        save_r2[1].append(np.mean(R2))
+
         print(target)
         best3 = np.array(best_R2[3])
         b = best3.argsort()
@@ -50,4 +56,12 @@ def main(target_list):
         file_path = f'stage2_excels/{target}/{target}_kfold_two.xlsx'     # 輸出excel檔案名稱
         with pd.ExcelWriter(file_path, engine = 'openpyxl', mode = 'w') as writer:
             df.to_excel(writer, sheet_name=target, index = False)
+            print(f'{target} kflod saved.')        
+            
+
+
+        df2 = pd.DataFrame({"tags":save_r2[0],"R2":save_r2[1]})
+        file_path2 = f'stage2_excels/{target}/{target}_kfold_two_unsort.xlsx'     # 輸出excel檔案名稱
+        with pd.ExcelWriter(file_path2, engine = 'openpyxl', mode = 'w') as writer:
+            df2.to_excel(writer, sheet_name=target, index = False)
             print(f'{target} kflod saved.')
