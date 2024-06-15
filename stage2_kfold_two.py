@@ -47,7 +47,7 @@ def main(target_list):
         b = best3.argsort()
         length = len(b)
         for i in range(length-1,-1,-1):
-            print("%-20s %-20s %d %10.3f"%(best_R2[0][b[i]],best_R2[1][b[i]],best_R2[2][b[i]],best_R2[3][b[i]]))
+            #print("%-20s %-20s %d %10.3f"%(best_R2[0][b[i]],best_R2[1][b[i]],best_R2[2][b[i]],best_R2[3][b[i]]))
             save_R2[0].append(best_R2[0][b[i]])
             save_R2[1].append(best_R2[1][b[i]])
             save_R2[2].append(best_R2[2][b[i]])
@@ -56,7 +56,7 @@ def main(target_list):
         file_path = f'stage2_excels/{target}/{target}_kfold_two.xlsx'     # 輸出excel檔案名稱
         with pd.ExcelWriter(file_path, engine = 'openpyxl', mode = 'w') as writer:
             df.to_excel(writer, sheet_name=target, index = False)
-            print(f'{target} kflod saved.')        
+            print(f'{target} kflod_two saved.')        
             
 
 
@@ -64,4 +64,4 @@ def main(target_list):
         file_path2 = f'stage2_excels/{target}/{target}_kfold_two_unsort.xlsx'     # 輸出excel檔案名稱
         with pd.ExcelWriter(file_path2, engine = 'openpyxl', mode = 'w') as writer:
             df2.to_excel(writer, sheet_name=target, index = False)
-            print(f'{target} kflod saved.')
+            print(f'{target} kflod_two_nusort saved.')

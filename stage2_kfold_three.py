@@ -11,6 +11,7 @@ def main(target_list):
     for target in target_list:
         best_R2 = [[],[],[],[],[]]
         save_R2 = [[],[],[],[],[]]
+        save_r2 = [[],[]]
         data = pd.read_excel(f'stage2_excels/{target}/{target}_merge_data.xlsx')
         y = data['nor']
         all_tags = data.columns
@@ -32,17 +33,20 @@ def main(target_list):
                             regressor.fit(X_train,y_train)
                             R2.append((regressor.score(X_test, y_test)))
                         if np.mean(R2) > 0:
+                            tag_merge = tag1 + tag2 + tag3 + str(num)
                             best_R2[0].append(tag1)
                             best_R2[1].append(tag2)
                             best_R2[2].append(tag3)
                             best_R2[3].append(num)
                             best_R2[4].append(np.mean(R2))
+                            save_r2[0].append(tag_merge)
+                            save_r2[1].append(np.mean(R2))
         print(target)
         best3 = np.array(best_R2[4])
         b = best3.argsort()
         length = len(b)
         for i in range(length-1,-1,-1):
-            print("%-20s %-20s %-20s %d %10.6f"%(best_R2[0][b[i]],best_R2[1][b[i]],best_R2[2][b[i]],best_R2[3][b[i]],best_R2[4][b[i]]))
+            #print("%-20s %-20s %-20s %d %10.6f"%(best_R2[0][b[i]],best_R2[1][b[i]],best_R2[2][b[i]],best_R2[3][b[i]],best_R2[4][b[i]]))
             save_R2[0].append(best_R2[0][b[i]])
             save_R2[1].append(best_R2[1][b[i]])
             save_R2[2].append(best_R2[2][b[i]])
@@ -52,4 +56,10 @@ def main(target_list):
         file_path = f'stage2_excels/{target}/{target}_kfold_three.xlsx'     # 輸出excel檔案名稱
         with pd.ExcelWriter(file_path, engine = 'openpyxl', mode = 'w') as writer:
             df.to_excel(writer, sheet_name=target, index = False)
-            print(f'{target} kflod saved.')
+            print(f'{target} kflod_three saved.')
+
+        df2 = pd.DataFrame({"tags":save_r2[0],"R2":save_r2[1]})
+        file_path2 = f'stage2_excels/{target}/{target}_kfold_three_unsort.xlsx'     # 輸出excel檔案名稱
+        with pd.ExcelWriter(file_path2, engine = 'openpyxl', mode = 'w') as writer:
+            df2.to_excel(writer, sheet_name=target, index = False)
+            print(f'{target} kflod_three_unsort saved.')
